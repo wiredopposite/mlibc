@@ -2,6 +2,11 @@ sysdep_supported_options = {
 	'posix': true,
 }
 
+rtld_sources += files(
+	'sysdeps.cpp',
+)
+rtld_include_dirs += include_directories('include')
+
 libc_sources += files(
 	'sysdeps.cpp',
 )

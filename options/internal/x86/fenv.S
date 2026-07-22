@@ -2,10 +2,14 @@
 
 # The functions below are taken from musl.
 
+#if defined(__ELF__)
 .hidden __hwcap
+#endif
 
 .global feclearexcept
+#if defined(__ELF__)
 .type feclearexcept,@function
+#endif
 feclearexcept:
 	mov 4(%esp),%ecx
 	and $0x3f,%ecx
@@ -52,7 +56,9 @@ feclearexcept:
 	ret
 
 .global feraiseexcept
+#if defined(__ELF__)
 .type feraiseexcept,@function
+#endif
 feraiseexcept:
 	mov 4(%esp),%eax
 	and $0x3f,%eax
@@ -65,8 +71,12 @@ feraiseexcept:
 	ret
 
 .global __fesetround
+#if defined(__ELF__)
 .hidden __fesetround
+#endif
+#if defined(__ELF__)
 .type __fesetround,@function
+#endif
 __fesetround:
 	mov 4(%esp),%ecx
 	push %eax
@@ -90,7 +100,9 @@ __fesetround:
 	ret
 
 .global fegetround
+#if defined(__ELF__)
 .type fegetround,@function
+#endif
 fegetround:
 	push %eax
 	fnstcw (%esp)
@@ -99,7 +111,9 @@ fegetround:
 	ret
 
 .global fegetenv
+#if defined(__ELF__)
 .type fegetenv,@function
+#endif
 fegetenv:
 	mov 4(%esp),%ecx
 	xor %eax,%eax
@@ -118,7 +132,9 @@ fegetenv:
 1:	ret
 
 .global fesetenv
+#if defined(__ELF__)
 .type fesetenv,@function
+#endif
 fesetenv:
 	mov 4(%esp),%ecx
 	xor %eax,%eax
@@ -151,7 +167,9 @@ fesetenv:
 1:	ret
 
 .global fetestexcept
+#if defined(__ELF__)
 .type fetestexcept,@function
+#endif
 fetestexcept:
 	mov 4(%esp),%ecx
 	and $0x3f,%ecx

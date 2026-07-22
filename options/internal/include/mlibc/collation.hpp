@@ -55,19 +55,34 @@ struct CollationPolicy<wchar_t> {
 	using UCharType = wint_t;
 
 	static auto getWeight(const mlibc::localeinfo *l) {
+#if __SIZEOF_WCHAR_T__ == 4
 		if constexpr (std::is_signed_v<wint_t>) {
 			return l->collate.get(_NL_COLLATE_WEIGHTWC).asInt32Span();
 		} else {
 			return l->collate.get(_NL_COLLATE_WEIGHTWC).asUint32Span();
 		}
+#else
+		// mlibc's collation tables assume a 32-bit wchar_t/wint_t (glibc
+		// convention). On platforms with a 16-bit wchar_t (e.g. Windows),
+		// there's no locale data to load anyway (nrules is always 0, which
+		// every caller checks before touching this), so an empty span of
+		// the right type is all that's needed to make this compile.
+		(void)l;
+		return frg::span<const UCharType>{};
+#endif
 	}
 
 	static auto getExtra(const mlibc::localeinfo *l) {
+#if __SIZEOF_WCHAR_T__ == 4
 		if constexpr (std::is_signed_v<wint_t>) {
 			return l->collate.get(_NL_COLLATE_EXTRAWC).asInt32Span();
 		} else {
 			return l->collate.get(_NL_COLLATE_EXTRAWC).asUint32Span();
 		}
+#else
+		(void)l;
+		return frg::span<const UCharType>{};
+#endif
 	}
 };
 

@@ -126,6 +126,30 @@ if not headers_only
 	add_project_arguments('-Werror=misleading-indentation', language: ['c', 'cpp'])
 	add_project_arguments('-fno-rtti', '-fno-exceptions', language: 'cpp')
 
+	if host_machine.system() == 'openox'
+		# clang never predefines these for MSVC-flavored (COFF) targets, but
+		# freestnd-cxx-hdrs' <atomic> assumes they exist. i686 is always
+		# lock-free for all of these in practice.
+		add_project_arguments(
+			'-D__GCC_ATOMIC_BOOL_LOCK_FREE=2',
+			'-D__GCC_ATOMIC_CHAR_LOCK_FREE=2',
+			'-D__GCC_ATOMIC_CHAR8_T_LOCK_FREE=2',
+			'-D__GCC_ATOMIC_CHAR16_T_LOCK_FREE=2',
+			'-D__GCC_ATOMIC_CHAR32_T_LOCK_FREE=2',
+			'-D__GCC_ATOMIC_WCHAR_T_LOCK_FREE=2',
+			'-D__GCC_ATOMIC_SHORT_LOCK_FREE=2',
+			'-D__GCC_ATOMIC_INT_LOCK_FREE=2',
+			'-D__GCC_ATOMIC_LONG_LOCK_FREE=2',
+			'-D__GCC_ATOMIC_LLONG_LOCK_FREE=2',
+			'-D__GCC_ATOMIC_POINTER_LOCK_FREE=2',
+			'-D__GCC_ATOMIC_TEST_AND_SET_TRUEVAL=1',
+			'-D_POSIX_C_SOURCE=202405L',
+			'-D_XOPEN_SOURCE=800',
+			'-D_GNU_SOURCE',
+			language: ['c', 'cpp'],
+		)
+	endif
+
 	if get_option('buildtype').startswith('debug')
 		add_project_arguments('-D__MLIBC_DEBUG', language : ['c', 'cpp'])
 	endif
@@ -312,6 +336,8 @@ elif host_machine.system() == 'zinnia'
 elif host_machine.system() == 'demo'
 	subdir('sysdeps/demo')
 # ANCHOR_END: demo-sysdeps
+elif host_machine.system() == 'openox'
+	subdir('sysdeps/openox')
 else
 	error('No sysdeps defined for OS: ' + host_machine.system())
 endif

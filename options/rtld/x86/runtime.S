@@ -6,4 +6,6 @@ pltRelocateStub:
 	# TODO: save floating point argument registers
 	ud2
 
+#if defined(__ELF__)
 .section .note.GNU-stack,"",%progbits
+#endif

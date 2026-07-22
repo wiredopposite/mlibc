@@ -1,7 +1,11 @@
 #include "mlibc-asm/helpers.h"
 
+#if defined(__ELF__)
 .hidden __setjmp
+#endif
+#if defined(__ELF__)
 .type __setjmp, "function"
+#endif
 __setjmp:
 	mov 4(%esp), %eax       # Save argument (buffer) in eax
 	mov %ebx, 0x00(%eax)
@@ -23,24 +27,34 @@ __setjmp:
 	jmp __sigsetjmp
 
 .global setjmp
+#if defined(__ELF__)
 .type setjmp, "function"
+#endif
 .global _setjmp
+#if defined(__ELF__)
 .type _setjmp, "function"
+#endif
 setjmp:
 _setjmp:
 	xor %edx, %edx
 	jmp __setjmp
 
 .global sigsetjmp
+#if defined(__ELF__)
 .type sigsetjmp, "function"
+#endif
 sigsetjmp:
 	mov $1, %edx
 	jmp __setjmp
 
 .global longjmp
+#if defined(__ELF__)
 .type longjmp, "function"
+#endif
 .global _longjmp
+#if defined(__ELF__)
 .type _longjmp, "function"
+#endif
 longjmp:
 _longjmp:
 	mov 4(%esp), %ecx

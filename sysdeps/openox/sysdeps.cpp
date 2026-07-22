@@ -107,7 +107,7 @@ int Sysdeps<FutexWake>::operator()(int *, bool) {
 int Sysdeps<FutexWait>::operator()(int *, int, timespec const *) {
 	STUB();
 }
-int Sysdeps<Read>::operator()(int, void *, unsigned long, long *) {
+int Sysdeps<Read>::operator()(int, void *, size_t, ssize_t *) {
 	STUB();
 }
 int Sysdeps<Open>::operator()(const char *, int, unsigned int, int *) {

@@ -349,7 +349,7 @@ if not headers_only
 		'musl-generic-math/trunc.c',
 		'musl-generic-math/truncf.c',
 		'musl-generic-math/truncl.c',
-		pic: true,
+		pic: get_option('b_staticpic'),
 		include_directories: libc_include_dirs,
 		dependencies: libc_deps,
 		c_args: [mlibc_c_args, compiler_c_args, '-Wno-implicit', '-Wno-parentheses', '-Wno-sign-compare', '-Wno-attributes', '-Wno-unknown-pragmas'],

@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#ifdef __GNUC__
+#if defined(__GNUC__) || defined(__clang__)
 # 	define BYTE_ORDER __BYTE_ORDER__
 #	define LITTLE_ENDIAN __ORDER_LITTLE_ENDIAN__
 #	define BIG_ENDIAN __ORDER_BIG_ENDIAN__
