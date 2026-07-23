@@ -512,6 +512,12 @@ internal_sources = [
 	'options/internal' / host_machine.cpu_family() / 'fenv.S',
 ]
 
+if host_machine.cpu_family() == 'x86'
+	internal_sources += [
+		'options/internal/x86/msvc_i64.c',
+	]
+endif
+
 if host_machine.cpu_family() == 'riscv64'
 	internal_sources += [
 		'options/internal/riscv64/hwprobe.cpp',
@@ -666,8 +672,7 @@ if not headers_only
 			link_args: mlibc_link_args,
 			include_directories: libc_include_dirs,
 			dependencies: libc_deps + rtlib_deps,
-			link_with: [ld_static_lib],
-			link_whole: [libc_sublibs, ld_static_lib],
+			link_whole: [libc_sublibs],
 			install: true
 		)
 	endif

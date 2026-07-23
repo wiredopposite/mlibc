@@ -26,6 +26,25 @@ __setjmp:
 1:
 	jmp __sigsetjmp
 
+// __sigsetjmp is entered here with eax = jmp_buf (already holding the
+// registers __setjmp just saved) and edx = 1 (savesigs requested), via
+// a tail jmp from __setjmp above -- so [esp] is still the original
+// caller's return address, untouched.
+//
+// A real implementation needs to query the current signal mask (kernel
+// state) and store it in the jmp_buf here before returning. There's no
+// signal subsystem yet, so there's no mask to save -- this just returns
+// success (0), identical to the non-sigmask path above. Once signals
+// exist, this is the one place that needs to change.
+#if defined(__ELF__)
+.hidden __sigsetjmp
+.type __sigsetjmp, "function"
+#endif
+.global __sigsetjmp
+__sigsetjmp:
+	xor %eax, %eax
+	ret
+
 .global setjmp
 #if defined(__ELF__)
 .type setjmp, "function"
